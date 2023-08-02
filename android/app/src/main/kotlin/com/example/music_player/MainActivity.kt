@@ -70,7 +70,9 @@ class MainActivity: FlutterActivity() {
         }
     }
 
-    // TODO -> futuramente fazer o set do timer da musica para qualquer posicao
+    private fun stopSong() {
+        mediaPlayer.stop()
+    }
 
     private fun readAudioFilesWithMediaStore(): MutableList<Map<String, Any>> {
         val audios = mutableListOf<Map<String, Any>>()

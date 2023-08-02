@@ -35,62 +35,64 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text(AppStrings.appBarHomeTitleSearch),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
+          IconButton(
+              onPressed: () =>
+                  Navigator.pushNamed(context, Routes.settingsRoute),
+              icon: const Icon(Icons.settings))
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: StreamBuilder<List<Audio>>(
-                initialData: const [],
-                stream: viewModel.stream,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+      body: StreamBuilder<List<Audio>>(
+        initialData: const [],
+        stream: viewModel.stream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-                  if (snapshot.data!.isEmpty) {
-                    return Center(
-                      child: Text(
-                        'Musicas não encontradas',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                    );
-                  }
+          if (snapshot.data!.isEmpty) {
+            return Center(
+              child: Text(
+                'Musicas não encontradas',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+            );
+          }
 
-                  return ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) => AudioTile(
-                      audio: snapshot.data![index],
-                      onTap: () => _onTapAudioTile(snapshot.data![index]),
-                    ),
-                  );
+          return SingleChildScrollView(
+            padding: const EdgeInsets.only(top: AppPadding.p16),
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) => AudioTile(
+                audio: snapshot.data![index],
+                onTap: () {
+                  viewModel.execute(snapshot.data![index]);
+                  viewModel.setCurrentAudio = snapshot.data![index];
                 },
               ),
             ),
-          ),
-        ],
+          );
+        },
       ),
       bottomSheet: StreamBuilder<Audio>(
         initialData: Audio.empty(),
         stream: viewModel.streamTrackPlaying,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container(height: 0);
+            return Container(height: AppSize.s0);
           }
 
           if ((snapshot.data?.title ?? '').isEmpty) {
-            return Container(height: 0);
+            return Container(height: AppSize.s0);
           }
 
           return BottomSheet(
             elevation: AppSize.s30,
             onClosing: () {},
+            enableDrag: false,
             builder: (context) {
               return ListTile(
                 leading: const Icon(Icons.music_note),
@@ -105,18 +107,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 trailing: snapshot.data!.isPlaying
                     ? IconButton(
-                        onPressed: () => viewModel.execute(),
+                        onPressed: () => viewModel.execute(snapshot.data!),
                         icon: const Icon(Icons.pause),
                       )
                     : IconButton(
-                        onPressed: () => viewModel.execute(),
+                        onPressed: () => viewModel.execute(snapshot.data!),
                         icon: const Icon(
                           Icons.play_arrow,
                         ),
                       ),
                 onTap: () {
                   Navigator.pushNamed(context, Routes.showSongRoute);
-                  viewModel.setAudio(snapshot.data!);
                 },
               );
             },
@@ -124,10 +125,5 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
     );
-  }
-
-  Future<void> _onTapAudioTile(Audio audio) async {
-    viewModel.setAudio(audio);
-    await viewModel.execute();
   }
 }

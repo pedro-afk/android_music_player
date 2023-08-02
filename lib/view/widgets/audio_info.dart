@@ -25,9 +25,9 @@ class AudioInfo extends StatelessWidget {
                   width: AppSize.s268,
                   decoration: BoxDecoration(
                     color: Colors.grey.withOpacity(ColorOpacity.o0_3),
-                    gradient: const LinearGradient(
+                    gradient: LinearGradient(
                       colors: [
-                        ColorManager.primary,
+                        Theme.of(context).colorScheme.primary,
                         ColorManager.lightGrey,
                       ],
                     ),
@@ -50,6 +50,7 @@ class AudioInfo extends StatelessWidget {
                   ),
                 ),
         ),
+        const SizedBox(height: AppSize.s30),
         Padding(
           padding: const EdgeInsets.only(
             left: AppPadding.p16,

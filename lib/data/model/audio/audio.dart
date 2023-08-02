@@ -1,24 +1,27 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:music_player/data/model/player/player.dart';
 part 'audio.g.dart';
 
 @JsonSerializable()
-class Audio {
+class Audio extends Player {
   int id;
   String title;
-  int duration;
   String artist;
   String path;
   String albumArt;
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  bool isPlaying = false;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  bool isSelected;
 
   Audio({
     required this.id,
     required this.title,
-    required this.duration,
     required this.artist,
     required this.path,
     required this.albumArt,
+    this.isSelected = false,
+    super.currentTime = 0,
+    super.duration = 0,
+    super.isPlaying = false,
   });
 
   factory Audio.fromMap(Map<String, dynamic> data) => _$AudioFromJson(data);
@@ -28,7 +31,6 @@ class Audio {
     return Audio(
       id: 0,
       title: '',
-      duration: 0,
       artist: '',
       path: '',
       albumArt: '',

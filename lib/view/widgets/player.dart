@@ -1,6 +1,6 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:music_player/app/functions.dart';
-import 'package:music_player/resources/color_manager.dart';
 import 'package:music_player/resources/size_manager.dart';
 import 'package:music_player/data/model/player/player.dart';
 
@@ -9,6 +9,9 @@ class PlayerView extends StatelessWidget {
   final void Function()? onNext;
   final void Function()? onPrevious;
   final void Function()? onExecute;
+  final void Function(double)? onChangeEnd;
+  final void Function(double)? onChanged;
+  final void Function(double)? onChangeStart;
 
   const PlayerView({
     super.key,
@@ -16,6 +19,9 @@ class PlayerView extends StatelessWidget {
     required this.onNext,
     required this.onPrevious,
     required this.onExecute,
+    required this.onChangeEnd,
+    required this.onChanged,
+    required this.onChangeStart,
   });
 
   @override
@@ -28,7 +34,9 @@ class PlayerView extends StatelessWidget {
             value: player.currentTime.toDouble(),
             min: 0.0,
             max: player.duration.toDouble(),
-            onChanged: (value) {},
+            onChanged: onChanged,
+            onChangeEnd: onChangeEnd,
+            onChangeStart: onChangeStart,
           ),
         ),
         Padding(
@@ -36,9 +44,9 @@ class PlayerView extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(formatAudioDuration(player.currentTime),
+              Text(player.formatAudioTime(isCurrentTime: true),
                   style: Theme.of(context).textTheme.bodySmall),
-              Text(formatAudioDuration(player.duration),
+              Text(player.formatAudioTime(),
                   style: Theme.of(context).textTheme.bodySmall),
             ],
           ),
@@ -55,13 +63,13 @@ class PlayerView extends StatelessWidget {
                 ? IconButton(
                     onPressed: onExecute,
                     iconSize: AppSize.s72,
-                    color: ColorManager.primary,
+                    color: Theme.of(context).colorScheme.primary,
                     icon: const Icon(Icons.pause_circle_filled_rounded),
                   )
                 : IconButton(
                     onPressed: onExecute,
                     iconSize: AppSize.s72,
-                    color: ColorManager.primary,
+                    color: Theme.of(context).colorScheme.primary,
                     icon: const Icon(Icons.play_circle_fill_rounded),
                   ),
             IconButton(

@@ -4,16 +4,20 @@ class Player {
   bool isPlaying;
 
   Player({
-    required this.duration,
-    required this.currentTime,
-    required this.isPlaying,
+    this.duration = 0,
+    this.currentTime = 0,
+    this.isPlaying = false,
   });
 
-  factory Player.empty() {
-    return Player(
-      duration: 0,
-      currentTime: 0,
-      isPlaying: false,
+  String formatAudioTime({bool isCurrentTime = false}) {
+    Duration durationMilli = Duration(
+      milliseconds: isCurrentTime ? currentTime : duration,
     );
+    int minutes = durationMilli.inMinutes;
+    int seconds = durationMilli.inSeconds.remainder(60);
+
+    String minutesStr = minutes.toString().padLeft(2, '0');
+    String secondsStr = seconds.toString().padLeft(2, '0');
+    return "$minutesStr:$secondsStr";
   }
 }

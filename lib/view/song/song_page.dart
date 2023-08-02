@@ -20,6 +20,10 @@ class _SongPageState extends State<SongPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.keyboard_arrow_down),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
           IconButton(
             onPressed: () {},
@@ -30,21 +34,25 @@ class _SongPageState extends State<SongPage> {
       body: Column(
         children: [
           StreamBuilder<Audio>(
-            initialData: viewModel.audio,
+            initialData: viewModel.currentAudio,
             stream: viewModel.streamTrackPlaying,
             builder: (context, snapshot) {
               return AudioInfo(audio: snapshot.data!);
             },
           ),
           StreamBuilder<Player>(
-            initialData: viewModel.player,
+            initialData: viewModel.currentAudio,
             stream: viewModel.streamPlayer,
             builder: (context, snapshot) {
               return PlayerView(
                 player: snapshot.data!,
-                onExecute: () => viewModel.execute(),
-                onNext: () {},
-                onPrevious: () {},
+                onExecute: () => viewModel.togglePlayAndPauseCurrentAudio(),
+                onNext: () => viewModel.nextAudio(),
+                onPrevious: () => viewModel.previousAudio(),
+                onChanged: (value) =>
+                    viewModel.setPositionAudioTime = value.toInt(),
+                onChangeEnd: (value) => viewModel.playOnNewAudioTimePosition(),
+                onChangeStart: (value) => viewModel.stopTimer(),
               );
             },
           ),
