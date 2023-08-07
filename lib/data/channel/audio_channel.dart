@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:music_player/app/constant.dart';
-import 'package:music_player/data/helper/channel_method.dart';
+import 'package:music_player/resources/channel_method.dart';
 
 class AudioChannel {
   MethodChannel channel = const MethodChannel(Constants.channelName);
@@ -21,4 +21,6 @@ class AudioChannel {
   Future fetchAllAudios() async {
     return await channel.invokeMethod(ChannelMethod.readFilesMediaStore);
   }
+
+  // TODO: Adicionar chamada ao equalizador
 }

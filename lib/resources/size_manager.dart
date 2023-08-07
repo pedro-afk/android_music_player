@@ -16,6 +16,10 @@ abstract class AppSize {
   static const double s30 = 30.0;
   static const double s34 = 34.0;
   static const double s36 = 36.0;
+  static const double s40 = 40.0;
+  static const double s42 = 42.0;
+  static const double s44 = 44.0;
+  static const double s46 = 46.0;
   static const double s56 = 56.0;
   static const double s62 = 62.0;
   static const double s64 = 64.0;
@@ -32,6 +36,8 @@ abstract class AppSize {
 }
 
 abstract class AppPadding {
+  static const double p2 = 2.0;
+  static const double p4 = 4.0;
   static const double p8 = 8.0;
   static const double p10 = 10.0;
   static const double p12 = 12.0;

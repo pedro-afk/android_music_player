@@ -1,5 +1,4 @@
 package com.example.music_player
-
 import io.flutter.embedding.android.FlutterActivity
 import android.database.Cursor
 import android.media.MediaPlayer
@@ -12,18 +11,23 @@ import android.util.Base64
 import com.example.music_player.resources.ChannelMethod
 import com.example.music_player.resources.Channels
 
-class MainActivity: FlutterActivity() {
+// TODO: refatorar essa estrutura
+
+class MainActivity : FlutterActivity() {
     private val channel = Channels.PLAYER_CHANNEL
     private lateinit var mediaPlayer: MediaPlayer
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channel).setMethodCallHandler {
-                call, res ->
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            channel
+        ).setMethodCallHandler { call, res ->
             when (call.method) {
                 ChannelMethod.PLAY_SONG -> {
                     val play = playSong(
                         call.argument<String>("path") as String,
-                        call.argument<Int>("msec") as Int)
+                        call.argument<Int>("msec") as Int
+                    )
                     res.success(play)
                 }
                 ChannelMethod.PAUSE_SONG -> {
@@ -59,19 +63,14 @@ class MainActivity: FlutterActivity() {
     // TODO -> criar rotina para loop da música
     // fun setIsLooping() {}
 
-    private fun getCurrentTrackPosition() : Int {
+    private fun getCurrentTrackPosition(): Int {
         var currentPosition = mediaPlayer.currentPosition
-
         return if (mediaPlayer.isPlaying && currentPosition < mediaPlayer.duration) {
             currentPosition = mediaPlayer.currentPosition
             currentPosition
         } else {
             0
         }
-    }
-
-    private fun stopSong() {
-        mediaPlayer.stop()
     }
 
     private fun readAudioFilesWithMediaStore(): MutableList<Map<String, Any>> {
@@ -84,7 +83,7 @@ class MainActivity: FlutterActivity() {
             MediaStore.Audio.Media.DATA,
         )
         val selection = "${MediaStore.Audio.Media.DATA} LIKE '%.mp3%'"
-        val cursor : Cursor = contentResolver.query(
+        val cursor: Cursor = contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
             projection,
             selection,
@@ -95,20 +94,22 @@ class MainActivity: FlutterActivity() {
         while (cursor.moveToNext()) {
             val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID))
             val name = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE))
-            val duration = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION))
-            val artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST))
+            val duration =
+                cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION))
+            val artist =
+                cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST))
             val path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA))
 
-            audios.add(mapOf(
-                "id" to id,
-                "title" to name,
-                "duration" to duration,
-                "artist" to artist,
-                "path" to path,
-                // "isPlaying" to false,
-                // "currentPosition" to 0,
-                "albumArt" to (getAlbumArt(Uri.parse(path)) ?: "")
-            ))
+            audios.add(
+                mapOf(
+                    "id" to id,
+                    "title" to name,
+                    "duration" to duration,
+                    "artist" to artist,
+                    "path" to path,
+                    "albumArt" to (getAlbumArt(Uri.parse(path)) ?: "")
+                )
+            )
         }
 
         cursor.close()
@@ -129,7 +130,7 @@ class MainActivity: FlutterActivity() {
         }
 
         return if (albumArt != null) {
-            Base64.encodeToString(albumArt , 0)
+            Base64.encodeToString(albumArt, 0)
         } else {
             null
         }

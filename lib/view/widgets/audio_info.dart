@@ -24,6 +24,7 @@ class AudioInfo extends StatelessWidget {
                   height: AppSize.s268,
                   width: AppSize.s268,
                   decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(AppSize.s12),
                     color: Colors.grey.withOpacity(ColorOpacity.o0_3),
                     gradient: LinearGradient(
                       colors: [
@@ -38,6 +39,7 @@ class AudioInfo extends StatelessWidget {
                   ),
                 )
               : ClipRRect(
+                  borderRadius: BorderRadius.circular(AppSize.s12),
                   child: Image.memory(
                     Uint8List.fromList(
                       base64Decode(
@@ -60,7 +62,7 @@ class AudioInfo extends StatelessWidget {
           child: Text(
             audio.title,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
         Padding(

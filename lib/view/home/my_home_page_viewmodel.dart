@@ -116,11 +116,23 @@ class MyHomeViewModel {
   }
 
   Future<void> requestAccessDirectoryPermission() async {
-    var reqMedia = await Permission.mediaLibrary.request();
-    var reqExternal = await Permission.storage.request();
-    if (reqMedia.isGranted && reqExternal.isGranted) {
+    await Permission.storage.request();
+    await Permission.mediaLibrary.request();
+
+    var statusPermissionMedia = await Permission.mediaLibrary.status;
+    var statusPermissionStorage = await Permission.storage.status;
+
+    if (statusPermissionMedia.isGranted && statusPermissionStorage.isGranted) {
       await audioFiles();
+      return;
     }
+
+    if (statusPermissionMedia.isPermanentlyDenied ||
+        statusPermissionStorage.isPermanentlyDenied) {
+      openAppSettings();
+    }
+
+    _audioController.sink.add([]);
   }
 
   void startTimer(Audio audio) {
@@ -129,8 +141,12 @@ class MyHomeViewModel {
       const Duration(milliseconds: 1000),
       (timer) async {
         audio.currentTime = await _channel.getTrackTimerPosition();
-        if (audio.currentTime == audio.duration) {
-          audio.isPlaying = false;
+        if (audio.currentTime == 0 && audio.duration == currentAudio.duration) {
+          if (audio == _audios.last) {
+            await _pauseSong(audio);
+          } else {
+            await nextAudio();
+          }
         }
         _playerController.sink.add(audio);
       },

@@ -37,10 +37,13 @@ class AudioTile extends StatelessWidget {
                 : ColorManager.lightGrey,
             size: AppSize.s22,
           ),
-          Text(
-            audio.artist,
-            style: const TextStyle(
-              color: ColorManager.lightGrey,
+          Flexible(
+            child: Text(
+              audio.artist,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: ColorManager.lightGrey,
+              ),
             ),
           ),
         ],

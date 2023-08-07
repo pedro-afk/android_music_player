@@ -54,8 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
           if (snapshot.data!.isEmpty) {
             return Center(
               child: Text(
-                'Musicas não encontradas',
-                style: Theme.of(context).textTheme.headlineSmall,
+                AppStrings.messageAudiosNotFound,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             );
           }
