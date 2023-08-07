@@ -36,14 +36,14 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text(AppStrings.appBarHomeTitleSearch),
         actions: [
           IconButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, Routes.settingsRoute),
-              icon: const Icon(Icons.settings))
+            onPressed: () => Navigator.pushNamed(context, Routes.settingsRoute),
+            icon: const Icon(Icons.settings),
+          ),
         ],
       ),
       body: StreamBuilder<List<Audio>>(
         initialData: const [],
-        stream: viewModel.stream,
+        stream: viewModel.streamAudio,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -95,6 +95,12 @@ class _MyHomePageState extends State<MyHomePage> {
             enableDrag: false,
             builder: (context) {
               return ListTile(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(AppSize.s28),
+                    topRight: Radius.circular(AppSize.s28),
+                  ),
+                ),
                 leading: const Icon(Icons.music_note),
                 title: Text(
                   snapshot.data!.title,
@@ -105,17 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   snapshot.data!.artist,
                   overflow: TextOverflow.ellipsis,
                 ),
-                trailing: snapshot.data!.isPlaying
-                    ? IconButton(
-                        onPressed: () => viewModel.execute(snapshot.data!),
-                        icon: const Icon(Icons.pause),
-                      )
-                    : IconButton(
-                        onPressed: () => viewModel.execute(snapshot.data!),
-                        icon: const Icon(
-                          Icons.play_arrow,
-                        ),
-                      ),
+                trailing: const Icon(Icons.keyboard_arrow_up),
                 onTap: () {
                   Navigator.pushNamed(context, Routes.showSongRoute);
                 },

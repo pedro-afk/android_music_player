@@ -6,6 +6,5 @@ abstract class PlayerMethods {
         const val PAUSE_SONG: String = "pauseSong"
         const val READ_FILES_MEDIA_STORE = "readFilesWithMediaStore"
         const val GET_CURRENT_TRACK_POSITION = "getCurrentTrackPosition"
-        const val CALL_EQUALIZER = "openEqualizer"
     }
 }

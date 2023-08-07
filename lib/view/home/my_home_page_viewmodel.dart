@@ -14,7 +14,7 @@ class MyHomeViewModel {
   final List<Audio> _tracksIn = [];
 
   final _audioController = StreamController<List<Audio>>();
-  Stream<List<Audio>> get stream => _audioController.stream;
+  Stream<List<Audio>> get streamAudio => _audioController.stream;
 
   final _trackPlayingController = StreamController<Audio>.broadcast();
   Stream<Audio> get streamTrackPlaying => _trackPlayingController.stream;
@@ -23,6 +23,7 @@ class MyHomeViewModel {
   Stream<Player> get streamPlayer => _playerController.stream;
 
   Audio currentAudio = Audio.empty();
+  int indexCurrentAudio = 0;
   Timer? _timer;
 
   Future<void> audioFiles() async {
@@ -42,17 +43,14 @@ class MyHomeViewModel {
         e.isSelected = false;
       }
     }
-
+    _trackPlayingController.sink.add(audio);
+    indexCurrentAudio = _audios.indexOf(audio);
     if (_tracksIn.isNotEmpty) {
       Audio lastAudio = _tracksIn.last;
       if (audio.id != lastAudio.id) {
-        await _pauseSong(lastAudio);
-        lastAudio.currentTime = 0;
-        lastAudio.isPlaying = false;
-        lastAudio.isSelected = false;
-
-        audio.isPlaying = await _playSong(audio);
-        _trackPlayingController.sink.add(audio);
+        await _pauseSong(indexCurrentAudio);
+        resetLastAudio(lastAudio);
+        audio.isPlaying = await _playSong(indexCurrentAudio);
         _tracksIn.add(audio);
         _audioController.sink.add(_audios);
         return;
@@ -60,42 +58,45 @@ class MyHomeViewModel {
       _tracksIn.add(audio);
       _audioController.sink.add(_audios);
     }
-
-    if (audio.isPlaying) {
-      audio.isPlaying = await _pauseSong(audio);
-      _trackPlayingController.sink.add(audio);
-    } else {
-      audio.isPlaying = await _playSong(audio);
-      _trackPlayingController.sink.add(audio);
-    }
-
+    await togglePlayAndPauseCurrentAudio();
     _tracksIn.add(audio);
     _audioController.sink.add(_audios);
   }
 
+  void resetLastAudio(Audio lastAudio) {
+    lastAudio.currentTime = 0;
+    lastAudio.isPlaying = false;
+    lastAudio.isSelected = false;
+  }
+
   Future<void> togglePlayAndPauseCurrentAudio() async {
     if (currentAudio.isPlaying) {
-      await _pauseSong(currentAudio);
+      await _pauseSong(indexCurrentAudio);
     } else {
-      await _playSong(currentAudio);
+      await _playSong(indexCurrentAudio);
     }
   }
 
-  Future<bool> _playSong(Audio audio) async {
-    var play = await _channel.play(audio.path, audio.currentTime);
-    audio.isPlaying = play;
-    startTimer(audio);
-    _playerController.sink.add(audio);
-    setCurrentAudio = audio;
+  Future<bool> _playSong(int index) async {
+    var play = await _channel.play(
+      _audios[index].path,
+      _audios[index].currentTime,
+    );
+    _audios[index].isPlaying = play;
+    startTimer(_audios[index]);
+    setCurrentAudio = _audios[index];
+    _playerController.sink.add(_audios[index]);
+    _audioController.sink.add(_audios);
     return play;
   }
 
-  Future<bool> _pauseSong(Audio audio) async {
+  Future<bool> _pauseSong(int index) async {
     stopTimer();
     var pause = await _channel.pause();
-    audio.isPlaying = pause;
-    _playerController.sink.add(audio);
-    setCurrentAudio = audio;
+    _audios[index].isPlaying = pause;
+    setCurrentAudio = _audios[index];
+    _playerController.sink.add(_audios[index]);
+    _audioController.sink.add(_audios);
     return pause;
   }
 
@@ -131,7 +132,6 @@ class MyHomeViewModel {
         statusPermissionStorage.isPermanentlyDenied) {
       openAppSettings();
     }
-
     _audioController.sink.add([]);
   }
 
@@ -143,7 +143,7 @@ class MyHomeViewModel {
         audio.currentTime = await _channel.getTrackTimerPosition();
         if (audio.currentTime == 0 && audio.duration == currentAudio.duration) {
           if (audio == _audios.last) {
-            await _pauseSong(audio);
+            await _pauseSong(indexCurrentAudio);
           } else {
             await nextAudio();
           }

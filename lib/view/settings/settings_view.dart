@@ -28,29 +28,30 @@ class _SettingsViewState extends State<SettingsView> {
         title: const Text(AppStrings.appBarTitleSettingsPage),
       ),
       body: StreamBuilder<Setting>(
-          initialData: viewModel.setting,
-          stream: viewModel.settingStream,
-          builder: (context, snapshot) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.dark_mode_outlined),
-                  title: const Text(AppStrings.titleListTileDarkMode),
-                  trailing: Switch(
-                    value: snapshot.data!.colorTheme.darkMode,
-                    onChanged: viewModel.toggleSwitchDarkMode,
-                  ),
+        initialData: viewModel.setting,
+        stream: viewModel.settingStream,
+        builder: (context, snapshot) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.dark_mode_outlined),
+                title: const Text(AppStrings.titleListTileDarkMode),
+                trailing: Switch(
+                  value: snapshot.data!.colorTheme.darkMode,
+                  onChanged: viewModel.toggleSwitchDarkMode,
                 ),
-                SetColorTheme(
-                  colors: viewModel.colors,
-                  colorSelected: snapshot.data!.colorTheme,
-                  onSelect: viewModel.setColorTheme,
-                ),
-              ],
-            );
-          }),
+              ),
+              SetColorTheme(
+                colors: viewModel.colors,
+                colorSelected: snapshot.data!.colorTheme,
+                onSelect: viewModel.setColorTheme,
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

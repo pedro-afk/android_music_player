@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:music_player/data/model/audio/audio.dart';
 import 'package:music_player/resources/color_manager.dart';
 import 'package:music_player/resources/font_manager.dart';
-import 'package:music_player/resources/size_manager.dart';
 
 class AudioTile extends StatelessWidget {
   final Audio audio;
@@ -28,25 +27,18 @@ class AudioTile extends StatelessWidget {
         ),
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: Row(
-        children: [
-          Icon(
-            Icons.graphic_eq,
-            color: audio.isSelected
-                ? Theme.of(context).colorScheme.primary
-                : ColorManager.lightGrey,
-            size: AppSize.s22,
-          ),
-          Flexible(
-            child: Text(
-              audio.artist,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: ColorManager.lightGrey,
-              ),
-            ),
-          ),
-        ],
+      leading: Icon(
+        audio.isPlaying ? Icons.pause : Icons.play_arrow_outlined,
+        color: audio.isSelected
+            ? Theme.of(context).colorScheme.primary
+            : ColorManager.lightGrey,
+      ),
+      subtitle: Text(
+        audio.artist,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(
+          color: ColorManager.lightGrey,
+        ),
       ),
       trailing: Text(
         audio.formatAudioTime(),
