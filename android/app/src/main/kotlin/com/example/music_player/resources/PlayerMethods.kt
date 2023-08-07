@@ -1,6 +1,6 @@
 package com.example.music_player.resources
 
-abstract class ChannelMethod {
+abstract class PlayerMethods {
     companion object {
         const val PLAY_SONG: String = "playSong"
         const val PAUSE_SONG: String = "pauseSong"
