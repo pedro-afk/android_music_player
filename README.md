@@ -1,6 +1,6 @@
 # Music Player App
 
-![App Demo](link_to_demo_gif.gif) *(replace `link_to_demo_gif.gif` with the actual link to your demo GIF)*
+![App Demo](https://github.com/pedro-afk/android_music_player/assets/readme/player.gif)
 
 This is a simple audio player designed to play .mp3 files from your device, allowing you to browse, play, pause, skip between tracks, and adjust the playback position.
 
@@ -48,14 +48,17 @@ Your contributions and suggestions are welcome! Feel free to fork this repositor
 
 Here are a few screenshots of the app:
 
-![Screenshot 1](link_to_screenshot_1.png) *(replace `link_to_screenshot_1.png` with the actual link to your screenshot)*
-
-![Screenshot 2](link_to_screenshot_2.png) *(replace `link_to_screenshot_2.png` with the actual link to your screenshot)*
-
-## License
-
-This project is licensed under the [MIT License](link_to_license_file). *(replace `link_to_license_file` with the actual link to your license file)*
-
----
-
-Feel free to customize this Markdown template according to your actual project details. Make sure to replace the placeholders with actual links and information. Good luck with your Music Player app!
+<table>
+  <tr>
+    <td><img alt="Home Light Mode" src="https://github.com/pedro-afk/android_music_player/assets/readme/home_light_mode.png"/></td>
+    <td><img alt="Home Dark Mode" src="https://github.com/pedro-afk/android_music_player/assets/readme/home_night_mode.png"/></td>
+  </tr>
+  <tr>
+    <td><img alt="Settings Light Mode" src="https://github.com/pedro-afk/android_music_player/assets/readme/settings_light_mode.png"/></td>
+    <td><img alt="Settings Dark Mode" src="https://github.com/pedro-afk/android_music_player/assets/readme/settings_night_mode.png"/></td>
+  </tr>  
+  <tr>
+    <td><img alt="Player Light Mode" src="https://github.com/pedro-afk/android_music_player/assets/readme/player_light_mode.png"/></td>
+    <td><img alt="Player Dark Mode" src="https://github.com/pedro-afk/android_music_player/assets/readme/player_night_mode.png"/></td>
+  </tr>
+</table>
