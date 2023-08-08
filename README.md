@@ -2,6 +2,8 @@
 
 ![App Demo](https://github.com/pedro-afk/android_music_player/blob/dev/assets/readme/player.gif)
 
+\\
+
 This is a simple audio player designed to play .mp3 files from your device, allowing you to browse, play, pause, skip between tracks, and adjust the playback position.
 
 ## Technologies Used
