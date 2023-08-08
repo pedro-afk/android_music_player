@@ -50,8 +50,8 @@ Here are a few screenshots of the app:
 
 <table>
   <tr>
-    <td><img alt="Home Light Mode" src="https://github.com/pedro-afk/android_music_player/tree/dev/assets/readme/home_light_mode.png"/></td>
-    <td><img alt="Home Dark Mode" src="https://github.com/pedro-afk/android_music_player/tree/dev/assets/readme/home_night_mode.png"/></td>
+    <td><img alt="Home Light Mode" src="https://github.com/pedro-afk/android_music_player/blob/dev/assets/readme/home_light_mode.png"/></td>
+    <td><img alt="Home Dark Mode" src="https://github.com/pedro-afk/android_music_player/blob/dev/assets/readme/home_night_mode.png"/></td>
   </tr>
   <tr>
     <td><img alt="Settings Light Mode" src="https://github.com/pedro-afk/android_music_player/tree/dev/assets/readme/settings_light_mode.png"/></td>
