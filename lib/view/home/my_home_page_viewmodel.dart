@@ -117,19 +117,16 @@ class MyHomeViewModel {
   }
 
   Future<void> requestAccessDirectoryPermission() async {
-    await Permission.storage.request();
     await Permission.mediaLibrary.request();
 
     var statusPermissionMedia = await Permission.mediaLibrary.status;
-    var statusPermissionStorage = await Permission.storage.status;
 
-    if (statusPermissionMedia.isGranted && statusPermissionStorage.isGranted) {
+    if (statusPermissionMedia.isGranted) {
       await audioFiles();
       return;
     }
 
-    if (statusPermissionMedia.isPermanentlyDenied ||
-        statusPermissionStorage.isPermanentlyDenied) {
+    if (statusPermissionMedia.isPermanentlyDenied) {
       openAppSettings();
     }
     _audioController.sink.add([]);
